@@ -1,0 +1,11 @@
+<%=form_with(model:[@user,@post] ,local:true) do |post| %>
+  <p>
+    <%= post.label :title %>
+    <%= post.text_field :title %>
+  </p>
+  <p>
+    <%= post.label :body %><br>
+    <%= post.text_area :body %>
+  </p>
+  <%= post.submit %>
+<%end %>

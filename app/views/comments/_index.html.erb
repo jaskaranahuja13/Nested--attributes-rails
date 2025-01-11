@@ -1,0 +1,33 @@
+<% unless @comments.ids.present? %>
+  <h1>No Comments available</h1>
+<% else %>
+  <h2>Comments</h2>
+  <table class="comments-table">
+    <thead>
+    <tr>
+      <th>User</th>
+      <th>Comment</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @comments.each do |comments| %>
+      <% if comments.id.present? %>
+        <tr>
+          <td><%= @posts.user.name %></td>
+          <td><%= comments.comment %></td>
+          <%if comments.post.user == @post.user.name %>
+            <td>
+              <%= button_to 'Delete', url_for(controller: 'comments', action: 'destroy', user_id: comments.post.user.id, post_id: comments.post.id, id: comments.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+            </td>
+          <%else%>
+            <td></td>
+            <td></td>
+          <%end %>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>

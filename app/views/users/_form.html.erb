@@ -1,0 +1,63 @@
+<%= form_with(model: @user, local: true, html: { id: 'user-form' }) do |user| %>
+  <h2>Your Details</h2>
+  <p>
+    <%= user.label :name %>
+    <%= user.text_field :name %>
+  </p>
+  <p>
+    <%= user.label :job %>
+    <%= user.text_field :job %>
+  </p>
+  <p>
+    <%= user.label :dob %>
+    <%= user.date_field :dob %>
+  </p>
+
+  <button type="button" id="toggle-posts">Add Posts</button>
+
+  <div id="posts-section" style="display: none;">
+    <h2>Posts</h2>
+    <%= user.fields_for :posts do |post| %>
+      <div class="post-fields">
+        <p>
+          <%= post.label :title %>
+          <%= post.text_field :title, disabled: true %>
+        </p>
+        <p>
+          <%= post.label :body %><br>
+          <%= post.text_area :body, disabled: true %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+
+  <%= user.hidden_field :include_posts, value: false %>
+  <%= user.submit 'Submit' %>
+<% end %>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('user-form');
+        const toggleButton = document.getElementById('toggle-posts');
+        const postsSection = document.getElementById('posts-section');
+        const postFields = postsSection.querySelectorAll('input, textarea');
+        const includePostsField = form.querySelector('[name*="include_posts"]');
+
+        let postsEnabled = false;
+
+        toggleButton.addEventListener('click', () => {
+            postsEnabled = !postsEnabled;
+            postsSection.style.display = postsEnabled ? 'block' : 'none';
+            toggleButton.textContent = postsEnabled ? 'Remove Posts' : 'Add Posts';
+            postFields.forEach(field => field.disabled = !postsEnabled);
+            includePostsField.value = postsEnabled ? 'true' : 'false';
+        });
+
+        form.addEventListener('submit', () => {
+            if (!postsEnabled) {
+                postFields.forEach(field => field.value = '');
+            }
+        });
+    });
+
+</script>

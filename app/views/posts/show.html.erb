@@ -1,0 +1,113 @@
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @post.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @post.body %>
+</p>
+
+<h2>Add a comment:</h2>
+<%= form_with(model: [ @user, @post, @comment], local: true) do |form| %>
+  <p>
+    <%= form.label :comment %><br>
+    <%= form.text_area :comment %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
+
+<% unless @comments.ids.present? %>
+  <h1>No Comments available</h1>
+<% else %>
+  <h2>Comments</h2>
+  <table class="comments-table">
+    <thead>
+    <tr>
+      <th>User</th>
+      <th>Comment</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @comments.each do |comment| %>
+      <% if comment.id.present? %>
+        <tr>
+          <td><%= comment.post.user.name %></td>
+          <td><%= comment.comment %> </td>
+          <% if @user == comment.user %> <!-- Only post creator can delete -->
+            <td>
+              <%= button_to 'Delete', url_for(controller: 'comments', action: 'destroy', user_id: @user.id, post_id: @post.id, id: comment.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+            </td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+
+<% end %>
+
+<div class="navigation">
+  <%= link_to 'Back to Posts', user_posts_path(@user) %> |
+  <%= link_to 'Back to Users', users_path %>
+<%= link_to 'Comments' , user_post_comments_path(@user,@post.id) %>
+</div>
+<!--<p>-->
+<!--  <strong>Name:</strong>-->
+  <%#= @user.name %>
+<!--</p>-->
+
+<!--<p>-->
+<!--  <strong>Title:</strong>-->
+  <%#= @post.title %>
+<!--</p>-->
+
+<!--<p>-->
+<!--  <strong>Body:</strong>-->
+  <%#= @post.body %>
+<!--</p>-->
+
+<!--<h2>Add a comment:</h2>-->
+<%#= form_with(model: [ @user, @post, @comment], local: true) do |form| %>
+
+<!--  <p>-->
+<!--    <%#= form.label :comment %><br>-->
+    <%#= form.text_area :comment %>
+<!--  </p>-->
+<!--  <p>-->
+    <%#= form.submit %>
+<!--  </p>-->
+<%# end %>
+<!--<h2>Comments</h2>-->
+<%# @comments.each_with_index do |comments,index| %>
+  <%# if comments.id.present? %>
+
+<!--    <p>-->
+<!--      <strong>commenter:</strong>-->
+      <%#= comments.post.user.name %>
+<!--    </p>-->
+
+<%#=comments.inspect %>
+<!--    <p>-->
+<!--      <strong>Comment:</strong>-->
+      <%#= comments.comment %>
+      <%#= button_to 'Delete', url_for(controller: 'comments', action: 'destroy', user_id: comments.post.user.id, post_id: comments.post.id, id: comments.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+<!--    </p>-->
+  <%# end %>
+
+<%# end %>
+
+<!--<div class="navigation">-->
+<!--  <%#= link_to 'Back to Posts', user_posts_path(@user) %> |-->
+  <%#= link_to 'Back to Users', users_path %>
+<!--</div>-->
